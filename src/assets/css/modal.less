@@ -1,0 +1,97 @@
+// Modal
+#modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.modal-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 500px;
+  height: 225px;
+  margin: 0 auto;
+  margin-top: 10%;
+  border: 1px sold #ccc;
+  background: rgba(0, 0, 0, .3);
+
+  .title {
+    width: 100%;
+    padding: 15px 0;
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid #ccc;
+    font-weight: bold;
+  }
+  .project-name {
+    padding: 20px;
+
+    .lab-pname {
+      color: #fff;
+    }
+    #pname {
+      width: 300px;
+      height: 30px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      margin-left: 15px;
+      text-indent: 10px;
+    }
+  }
+
+  .btn-group {
+    padding: 15px 0;
+
+    .btn {
+      padding: 12px 20px;
+      border-radius: 4px;
+    }
+    .cancel {
+      margin-right: 20px;
+      border: 1px solid #dcdfe6;
+      color: #606266;
+      background-color: #fff;
+
+      &:hover {
+        color: #409eff;
+        border-color: #c6e2ff;
+        background-color: #ecf5ff;
+      }
+    }
+
+    .confirm {
+      border: 1px solid #409eff;
+      background-color: #409eff;
+      color: #fff;
+
+      &:hover {
+        background-color: #66b1ff;
+        border-color: #66b1ff;
+      }
+    }
+  }
+}
+
+// Message
+
+#message {
+  position: absolute;
+  top: -50px;
+  left: 0;
+  z-index: 999;
+  width: 100%;
+  transition: top .5s;
+
+  .message-container {
+    margin: 0 auto;
+    width: 30%;
+    height: 40px;
+    background-color: #F0F9EB;
+    text-align: center;
+    line-height: 40px;
+    border-radius: 5px;
+    color: #67C68A;
+  }
+}
