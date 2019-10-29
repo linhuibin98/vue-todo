@@ -1,8 +1,10 @@
+/* eslint-disable */
 <template>
-  <div class="detail-container">
+  <div v-if="!resouce" class="no-item">请添加项目吧</div>
+  <div v-else class="detail-container">
     <div class="detail-header">
       <div class="project-detail">
-        <div class="project-name">吃饭</div>
+        <div class="project-name">{{resouce.name}}</div>
         <div class="project-count">
           <span>{{projectResources.ongoing.res.length}}</span>
         </div>
@@ -45,6 +47,10 @@
 <script>
 // import { cloneDeep } from 'lodash';
 import ProjectItem from '@/components/ProjectItem.vue';
+import watchRouteUptateStorage from '../tools/watchRouteUptateStorage';
+import addItem from '../tools/addItem';
+import updateStorage from '../tools/updateStorage';
+import checkedUpdate from '../tools/checkedUpdate';
 
 export default {
   data() {
@@ -52,17 +58,18 @@ export default {
       projectResources: {
         all: {
           type: 'all',
-          res: [{ describe: '完成header组件' }, { describe: '完成footer组件', selected: true }],
+          res: [],
         },
         ongoing: {
           type: 'ongoing',
-          res: [{ describe: '完成header组件' }],
+          res: [],
         },
         completed: {
           type: 'completed',
-          res: [{ describe: '完成footer组件', selected: true }],
+          res: [],
         },
       },
+      resouce: null,
     };
   },
   components: {
@@ -70,91 +77,83 @@ export default {
   },
   methods: {
     handleResourcesAll(val) {
-      this.projectResources.all.res.unshift({
-        describe: val,
-        selected: false,
+      addItem({
+        self: this,
+        val,
+        data1: 'all',
+        data2: 'ongoing',
       });
-      this.projectResources.ongoing.res.push({
-        describe: val,
-        selected: false,
-      });
+      updateStorage(this); // 更新本地存储
     },
     handleResourcesOngoing(val) {
-      this.projectResources.all.res.unshift({
-        describe: val,
-        selected: false,
+      addItem({
+        self: this,
+        val,
+        data1: 'all',
+        data2: 'ongoing',
       });
-      this.projectResources.ongoing.res.push({
-        describe: val,
-        selected: false,
-      });
+      updateStorage(this); // 更新本地存储
     },
     handleResourcesCompleted(val) {
-      this.projectResources.completed.res.unshift({
-        describe: val,
+      addItem({
+        self: this,
+        val,
+        data1: 'completed',
+        data2: 'all',
         selected: true,
       });
-      this.projectResources.all.res.push({
-        describe: val,
-        selected: true,
-      });
+      updateStorage(this); // 更新本地存储
     },
     hadnleChangeRes(dec) {
       const { type, index, checked } = dec;
-      // const resources = cloneDeep(this.projectResources[type]);
-      // resources.res[index].selected = checked;
-      // this.projectResources[type] = resources;
       this.projectResources[type].res[index].selected = checked;
       if (type === 'ongoing' && checked) {
-        const comp = this.projectResources[type].res.splice(index, 1);
-        this.projectResources.all.res.forEach((item, i) => {
-          if (item.describe === comp[0].describe) {
-            // eslint-disable-next-line prefer-destructuring
-            this.projectResources.all.res.splice(i, 1, comp[0]);
-            this.projectResources.completed.res.unshift(...comp);
-          }
+        checkedUpdate({
+          self: this, data1: 'all', data2: 'all', data3: 'completed', ...dec,
         });
       } else if (type === 'completed' && !checked) {
-        const comp = this.projectResources[type].res.splice(index, 1);
-        this.projectResources.all.res.forEach((item, i) => {
-          if (item.describe === comp[0].describe) {
-            // eslint-disable-next-line prefer-destructuring
-            this.projectResources.all.res.splice(i, 1, comp[0]);
-            this.projectResources.ongoing.res.unshift(...comp);
-          }
+        checkedUpdate({
+          self: this, data1: 'all', data2: 'all', data3: 'ongoing', ...dec,
         });
       } else if (type === 'all' && checked) {
-        const comp = this.projectResources[type].res.slice(index, index + 1);
-        this.projectResources.ongoing.res.forEach((item, i) => {
-          if (item.describe === comp[0].describe) {
-            this.projectResources.ongoing.res.splice(i, 1);
-            this.projectResources.completed.res.unshift(...comp);
-          }
+        checkedUpdate({
+          self: this, data1: 'ongoing', data2: 'ongoing', data3: 'completed', ...dec,
         });
       } else if (type === 'all' && !checked) {
-        const comp = this.projectResources[type].res.slice(index, index + 1);
-        this.projectResources.completed.res.forEach((item, i) => {
-          if (item.describe === comp[0].describe) {
-            this.projectResources.completed.res.splice(i, 1);
-            this.projectResources.ongoing.res.unshift(...comp);
-          }
+        checkedUpdate({
+          self: this, data1: 'completed', data2: 'completed', data3: 'ongoing', ...dec,
         });
       }
+    },
+  },
+
+  created() {
+    watchRouteUptateStorage(this);
+  },
+
+  watch: {
+    $route() {
+      watchRouteUptateStorage(this);
     },
   },
 };
 </script>
 
 <style lang="less" scoped>
+.no-item {
+  width: 80%;
+}
 .detail-container {
   flex: 5;
   width: 100%;
-  background-color: #e2e2e2;
+  border: 1px solid #ddd;
+  border-left: none;
 
   .detail-header {
     display: flex;
     justify-content: space-between;
     padding: 20px;
+    border-bottom: 1px solid #ddd;
 
     .project-detail {
       display: flex;
@@ -162,6 +161,7 @@ export default {
 
       .project-name {
         margin-right: 10px;
+        font-weight: bold;
       }
       .project-count {
         span {
@@ -194,11 +194,20 @@ export default {
     padding: 0 20px 20px 20px;
 
     .all {
+      margin-top: 15px;
       margin-right: 15px;
+      border: 1px solid #ddd;
     }
 
     .ongoing {
+      margin-top: 15px;
       margin-right: 15px;
+      border: 1px solid #ddd;
+    }
+
+    .completed {
+      margin-top: 15px;
+      border: 1px solid #ddd;
     }
   }
 }

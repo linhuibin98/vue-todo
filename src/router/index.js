@@ -1,19 +1,25 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
+import getFirstItem from '../tools/getFirstItem';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
+    path: '/home',
     name: 'home',
     component: Home,
+    children: [{
+      path: 'detail',
+      name: 'HomeRight',
+      component: () => import('@/components/HomeRight'),
+    }],
   },
-  // {
-  //   path: '/modal',
-  //   component: () => import('@/components/Modal'),
-  // },
+  {
+    path: '/',
+    redirect: '/home',
+  },
 ];
 
 const router = new VueRouter({

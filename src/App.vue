@@ -4,6 +4,20 @@
   </div>
 </template>
 
+<script>
+export default {
+  mounted() {
+  //   window.addEventListener('hashchange',()=>{
+  //     console.log(1);
+	// 	var currentPath = window.location.hash.slice(1); // 获取输入的路由
+	// 	if(this.$router.path !== currentPath){
+	// 		this.$router.push(currentPath); // 动态跳转
+	// 	}
+	// },false);
+  }
+}
+</script>
+
 <style lang="less">
 @font-face {
   font-family: 'iconfont';  /* project id 1478643 */
@@ -29,6 +43,10 @@ i {
 
 i:hover {
   color: #28c6d3;
+}
+
+a {
+  text-decoration: none;
 }
 
 body {
