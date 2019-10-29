@@ -5,17 +5,7 @@
 </template>
 
 <script>
-export default {
-  mounted() {
-  //   window.addEventListener('hashchange',()=>{
-  //     console.log(1);
-	// 	var currentPath = window.location.hash.slice(1); // 获取输入的路由
-	// 	if(this.$router.path !== currentPath){
-	// 		this.$router.push(currentPath); // 动态跳转
-	// 	}
-	// },false);
-  }
-}
+export default {};
 </script>
 
 <style lang="less">

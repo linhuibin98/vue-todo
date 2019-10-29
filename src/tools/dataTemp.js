@@ -1,7 +1,6 @@
 import getOwnId from '@/tools/getOwnId';
 
 export default function dataTemp(name) {
-
   return {
     [name]: {
       name,
@@ -19,7 +18,7 @@ export default function dataTemp(name) {
           type: 'completed',
           res: [],
         },
-      }
-    }
-  }
+      },
+    },
+  };
 }

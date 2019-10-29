@@ -1,8 +1,8 @@
 export default function addItem(opts) {
-  let {
-    self, val, data1, data2, selected,
+  const {
+    self, val, data1, data2,
   } = opts;
-  selected = selected || false;
+  const selected = opts.selected || false;
   self.projectResources[data1].res.unshift({
     describe: val,
     selected: selected,

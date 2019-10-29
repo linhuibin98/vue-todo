@@ -1,7 +1,8 @@
-import {getStorage} from './hadnleStorage';
+/* eslint-disable */
+import { getStorage } from './hadnleStorage';
 
 export default function getFirstItem() {
-  let res = getStorage('task');
+  const res = getStorage('task');
   let id = 0;
   for (const key in res) {
     if (res.hasOwnProperty(key)) {
